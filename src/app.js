@@ -7,7 +7,6 @@ const InventoryApi = require('./source/index');
 require('dotenv').config();
 
 const middlewares = require('./middlewares');
-const api = require('./api');
 
 const app = express();
 
@@ -58,8 +57,6 @@ app.get('/', async (req, res) => {
 
   res.json(inventory);
 });
-
-app.use('/api/v1', api);
 
 app.use(middlewares.notFound);
 app.use(middlewares.errorHandler);
