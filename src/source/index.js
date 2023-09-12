@@ -39,9 +39,9 @@ const InventoryApi = {
     tradable = true,
     retryFn = () => true,
   }) {
-    // if (this.recentRotations >= this.maxUse) {
-    //   return Promise.reject('Too many requests');
-    // }
+    if (this.recentRotations >= this.maxUse) {
+      return Promise.reject(new Error('Too many requests'));
+    }
 
     const url = `http://steamcommunity.com/inventory/${steamid}/${appid}/${contextid}?l=${language}&count=${count}${
       start ? `&start_assetid=${start}` : ''
