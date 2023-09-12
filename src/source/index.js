@@ -23,7 +23,7 @@ const InventoryApi = {
       contextid,
       steamid,
       retries,
-      count: 1
+      count: 1,
     }).then((res) => res.total);
   },
   get({
@@ -37,7 +37,7 @@ const InventoryApi = {
     retryDelay = 0,
     language = 'english',
     tradable = true,
-    retryFn = () => true
+    retryFn = () => true,
   }) {
     // if (this.recentRotations >= this.maxUse) {
     //   return Promise.reject('Too many requests');
@@ -49,7 +49,7 @@ const InventoryApi = {
     const options = {
       url,
       json: true,
-      proxy: this.useProxy ? this.proxy() : undefined
+      proxy: this.useProxy ? this.proxy() : undefined,
     };
 
     this.recentRequests += 1;
@@ -65,11 +65,7 @@ const InventoryApi = {
           // TODO: Don't throw for private inventory etc.
           console.log('Retry error', err);
           if (retries > 1) {
-            console.log(
-              `Retrying. Start ${start}, Retries ${retries}, Proxy ${options.proxy}, Items ${
-                result ? result.items.length : 0
-              }`
-            );
+            console.log(`Retrying. Start ${start}, Retries ${retries}, Proxy ${options.proxy}, Items ${result ? result.items.length : 0}`);
             options.proxy = this.useProxy ? this.proxy() : undefined;
             this.recentRequests += 1;
             this.recentRotations = Math.floor(this.recentRequests / this.proxyList.length);
@@ -94,7 +90,7 @@ const InventoryApi = {
           retries,
           retryDelay,
           language,
-          tradable
+          tradable,
         });
       }
 
@@ -104,7 +100,7 @@ const InventoryApi = {
   parse(res, progress, contextid, tradable) {
     const parsed = progress || {
       items: [],
-      total: 0
+      total: 0,
     };
 
     if (res.success && res.total_inventory_count === 0) return parsed;
@@ -121,7 +117,7 @@ const InventoryApi = {
     }
 
     return parsed;
-  }
+  },
 };
 
 module.exports = InventoryApi;
