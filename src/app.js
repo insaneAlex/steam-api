@@ -3,6 +3,7 @@ const morgan = require('morgan');
 const helmet = require('helmet');
 const cors = require('cors');
 const InventoryApi = require('./source/index');
+const isNumeric = require('./helpers/get-is-integer');
 
 require('dotenv').config();
 
@@ -12,17 +13,12 @@ const app = express();
 
 const inventoryApi = Object.create(InventoryApi);
 
-const isNumeric = (str) => {
-  if (typeof str !== 'string') return false;
-  return !Number.isNaN(str) && !Number.isNaN(parseFloat(str));
-};
-
 inventoryApi.init({
   id: 'Name of inventoryApi instance',
   proxy: [],
   proxyRepeat: 1,
   maxUse: 25,
-  requestInterval: 60 * 1000
+  requestInterval: 60 * 1000,
 });
 
 const contextid = 2;
@@ -33,7 +29,7 @@ app.use(helmet());
 app.use(cors());
 app.use(express.json());
 
-app.get('/', async (req, res) => {
+app.get('/v1/csgoInventory', async (req, res) => {
   const {steamid} = req.query;
   const isNum = isNumeric(steamid);
 
@@ -45,7 +41,7 @@ app.get('/', async (req, res) => {
         appid,
         contextid,
         steamid,
-        tradable: false
+        tradable: false,
       })
       .then(({items}) => items)
       .catch((err) => {

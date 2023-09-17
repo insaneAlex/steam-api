@@ -4,8 +4,8 @@
   "description": "A basic starter for an express.js API",
   "main": "index.js",
   "scripts": {
-    "start": "node src/index.js",
-    "dev": "nodemon src/index.js",
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
     "lint": "eslint --fix src",
     "test": "jest",
     "vercel-build": "echo hello"
@@ -19,9 +19,10 @@
   "license": "MIT",
   "dependencies": {
     "cors": "^2.8.5",
-    "dotenv": "^16.1.4",
+    "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "helmet": "^7.0.0",
+    "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.0",
     "prettier": "^3.0.3",
     "request-promise-native": "^1.0.9"
