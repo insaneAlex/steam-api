@@ -37,12 +37,8 @@ module.exports = (item, descriptions, contextID) => {
   parsed.tradable = !!parsed.tradable;
   parsed.marketable = !!parsed.marketable;
   parsed.commodity = !!parsed.commodity;
-  parsed.market_tradable_restriction = parsed.market_tradable_restriction
-    ? parseInt(parsed.market_tradable_restriction, 10)
-    : 0;
-  parsed.market_marketable_restriction = parsed.market_marketable_restriction
-    ? parseInt(parsed.market_marketable_restriction, 10)
-    : 0;
+  parsed.market_tradable_restriction = parsed.market_tradable_restriction ? parseInt(parsed.market_tradable_restriction, 10) : 0;
+  parsed.market_marketable_restriction = parsed.market_marketable_restriction ? parseInt(parsed.market_marketable_restriction, 10) : 0;
   parsed.fraudwarnings = parsed.fraudwarnings || [];
   parsed.descriptions = parsed.descriptions || [];
 

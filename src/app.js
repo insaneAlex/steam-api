@@ -45,7 +45,7 @@ app.get('/', async (req, res) => {
         appid,
         contextid,
         steamid,
-        tradable: true
+        tradable: false
       })
       .then(({items}) => items)
       .catch((err) => {
