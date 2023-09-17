@@ -8,6 +8,7 @@ const isNumeric = require('./helpers/get-is-integer');
 require('dotenv').config();
 
 const middlewares = require('./middlewares');
+const {DUMMY_INVENTORY} = require('./dummy-inventory');
 
 const app = express();
 
@@ -29,29 +30,30 @@ app.use(helmet());
 app.use(cors());
 app.use(express.json());
 
+const getCSGOInventory = async (steamid) => {
+  const response = await inventoryApi.get({
+    appid,
+    contextid,
+    steamid,
+    tradable: false,
+  });
+  return response.items;
+};
+
 app.get('/v1/csgoInventory', async (req, res) => {
-  const {steamid} = req.query;
-  const isNum = isNumeric(steamid);
+  try {
+    const {steamid} = req.query;
 
-  let inventory = {steamid, isNum};
+    if (!isNumeric(steamid)) {
+      throw new Error('Invalid Steam ID');
+    }
 
-  if (steamid && isNum) {
-    inventory = await inventoryApi
-      .get({
-        appid,
-        contextid,
-        steamid,
-        tradable: false,
-      })
-      .then(({items}) => items)
-      .catch((err) => {
-        if (err.statusCode === 429) {
-          console.log('Too many requests, try again later.');
-        }
-      });
+    const inventory = await getCSGOInventory(steamid);
+    res.status(200).json({statusCode: 200, inventory});
+  } catch (error) {
+    const statusCode = error.response && error.response.statusCode ? error.response.statusCode : 201;
+    res.status(statusCode).json({statusCode, inventory: DUMMY_INVENTORY});
   }
-
-  res.json(inventory);
 });
 
 app.use(middlewares.notFound);
