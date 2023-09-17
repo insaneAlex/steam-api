@@ -51,7 +51,7 @@ app.get('/v1/csgoInventory', async (req, res) => {
     const inventory = await getCSGOInventory(steamid);
     res.status(200).json({statusCode: 200, inventory});
   } catch (error) {
-    const statusCode = error.response && error.response.statusCode ? error.response.statusCode : 201;
+    const statusCode = error.response && error.response.statusCode;
     res.status(statusCode).json({statusCode, inventory: DUMMY_INVENTORY});
   }
 });
