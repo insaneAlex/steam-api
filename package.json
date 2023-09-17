@@ -4,8 +4,8 @@
   "description": "A basic starter for an express.js API",
   "main": "index.js",
   "scripts": {
-    "start": "node src/server.js",
-    "dev": "nodemon src/server.js",
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
     "lint": "eslint --fix src",
     "test": "jest",
     "vercel-build": "echo hello"
