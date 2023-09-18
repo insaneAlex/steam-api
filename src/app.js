@@ -12,16 +12,6 @@ const {DUMMY_INVENTORY} = require('./dummy-inventory');
 
 const app = express();
 
-const inventoryApi = Object.create(InventoryApi);
-
-inventoryApi.init({
-  id: 'Name of inventoryApi instance',
-  proxy: [],
-  proxyRepeat: 1,
-  maxUse: 25,
-  requestInterval: 60 * 1000,
-});
-
 const contextid = 2;
 const appid = 730;
 
@@ -30,7 +20,9 @@ app.use(helmet());
 app.use(cors());
 app.use(express.json());
 
-const getCSGOInventory = async (steamid) => {
+const getCSGOInventory = async ({steamid}) => {
+  const inventoryApi = Object.create(InventoryApi);
+
   const response = await inventoryApi.get({
     appid,
     contextid,
@@ -41,18 +33,20 @@ const getCSGOInventory = async (steamid) => {
 };
 
 app.get('/v1/csgoInventory', async (req, res) => {
+  const {steamid} = req.query;
+
+  if (!isNumeric(steamid)) {
+    return res.json({inventory: DUMMY_INVENTORY});
+  }
+
   try {
-    const {steamid} = req.query;
-
-    if (!isNumeric(steamid)) {
-      throw new Error('Invalid Steam ID');
-    }
-
-    const inventory = await getCSGOInventory(steamid);
-    res.status(200).json({statusCode: 200, inventory});
+    const inventory = await getCSGOInventory({steamid});
+    return res.status(200).json({statusCode: 200, inventory});
   } catch (error) {
-    const statusCode = error.response && error.response.statusCode;
-    res.status(statusCode).json({statusCode, inventory: DUMMY_INVENTORY});
+    if (error.statusCode) {
+      return res.status(error.statusCode).json({inventory: DUMMY_INVENTORY, error});
+    }
+    return res.json({inventory: DUMMY_INVENTORY, error});
   }
 });
 
