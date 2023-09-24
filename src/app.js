@@ -38,7 +38,7 @@ const getItemPrice = async ({hashName}) => {
   console.log(hashName);
 
   const currency = 1;
-  let resp = {shit: 'shit'};
+  let resp;
 
   try {
     resp = await axios.get(getSteamPriceBaseUrl, {
