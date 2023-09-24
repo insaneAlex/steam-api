@@ -48,6 +48,7 @@ const getItemPrice = async ({hashName}) => {
       },
     });
   } catch (e) {
+    console.log(e);
     response = {e};
   }
 
@@ -80,6 +81,7 @@ app.get('/v1/itemPrice', async (req, res) => {
     const {median_price} = response;
     return res.json({hashName, price: median_price});
   } catch (e) {
+    console.log(e);
     return res.json({desc: 'Something horrible happened', e});
   }
 });
