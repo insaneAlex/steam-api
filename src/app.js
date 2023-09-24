@@ -35,13 +35,12 @@ const getCSGOInventory = async ({steamid}) => {
 
 const getItemPrice = async ({hashName}) => {
   const getSteamPriceBaseUrl = 'https://steamcommunity.com/market/priceoverview/';
-  console.log(hashName);
 
   const currency = 1;
-  let resp = {shit: 'shit'};
+  let response;
 
   try {
-    resp = await axios.get(getSteamPriceBaseUrl, {
+    response = await axios.get(getSteamPriceBaseUrl, {
       params: {
         currency,
         appid,
@@ -49,10 +48,10 @@ const getItemPrice = async ({hashName}) => {
       },
     });
   } catch (e) {
-    resp = {e};
+    response = {e};
   }
 
-  return resp.data;
+  return response.data;
 };
 
 app.get('/v1/csgoInventory', async (req, res) => {
