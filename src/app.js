@@ -2,12 +2,13 @@ const express = require('express');
 const morgan = require('morgan');
 const helmet = require('helmet');
 const cors = require('cors');
-const {default: axios} = require('axios');
+
 const market = require('steam-market-pricing');
+const {SteamMarketParser} = require('steam-market-parser');
+
 const InventoryApi = require('./source/index');
 const isNumeric = require('./helpers/get-is-integer');
 require('dotenv').config();
-
 const middlewares = require('./middlewares');
 const {DUMMY_INVENTORY} = require('./dummy-inventory');
 const {LAST_PRICES} = require('./dummy-prices');
@@ -29,31 +30,23 @@ const getCSGOInventory = async ({steamid}) => {
     appid,
     contextid,
     steamid,
-    tradable: false,
+    tradable: false
   });
   return response.items;
 };
 
 const getItemPrice = async ({hashName}) => {
-  const getSteamPriceBaseUrl = 'https://steamcommunity.com/market/priceoverview/';
-
-  const currency = 1;
+  const smParser = new SteamMarketParser();
   let response;
-
   try {
-    response = await axios.get(getSteamPriceBaseUrl, {
-      params: {
-        currency,
-        appid,
-        market_hash_name: hashName,
-      },
-    });
+    response = await smParser.getMarketData(hashName);
+    console.log(response);
+    return response;
   } catch (e) {
     console.log(e);
     response = {e};
+    return response;
   }
-
-  return response.data;
 };
 
 const getPrices = async ({names}) => {
@@ -105,8 +98,8 @@ app.get('/v1/itemPrice', async (req, res) => {
 
   try {
     const response = await getItemPrice({hashName});
-    const {median_price} = response;
-    return res.json({hashName, price: median_price});
+
+    return res.json({hashName, priceHistory: response.priceHistory});
   } catch (e) {
     console.log(e);
     return res.json({desc: 'Something horrible happened', e});
