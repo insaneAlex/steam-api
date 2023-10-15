@@ -13,15 +13,13 @@ const InventoryApi = {
     retryDelay = 100,
     language = 'english',
     tradable = true,
-    retryFn = () => true,
+    retryFn = () => true
   }) {
     if (this.recentRotations >= this.maxUse) {
       return Promise.reject(new Error('Too many requests'));
     }
 
-    const url = `http://steamcommunity.com/inventory/${steamid}/${appid}/${contextid}?l=${language}&count=${count}${
-      start ? `&start_assetid=${start}` : ''
-    }`;
+    const url = `http://steamcommunity.com/inventory/${steamid}/${appid}/${contextid}?l=${language}&count=${count}`;
 
     this.recentRequests += 1;
 
@@ -53,7 +51,7 @@ const InventoryApi = {
           retries,
           retryDelay,
           language,
-          tradable,
+          tradable
         });
       }
 
@@ -63,7 +61,7 @@ const InventoryApi = {
   parse(res, progress, contextid, tradable) {
     const parsed = progress || {
       items: [],
-      total: 0,
+      total: 0
     };
 
     if (res.success && res.total_inventory_count === 0) return parsed;
@@ -83,6 +81,6 @@ const InventoryApi = {
     });
 
     return parsed;
-  },
+  }
 };
 module.exports = InventoryApi;
