@@ -1,0 +1,15 @@
+const AWS_REGION = 'eu-central-1';
+const INVENTORY_TABLE = 'inventories';
+const PRICES_API_URL = 'http://csgobackpack.net/api/GetItemsList/v2/';
+const ONE_DAY = 24 * 60 * 60 * 1000;
+const DYNAMO_DB_FETCH_INVENTORY_ERROR = 'DYNAMO_DB_FETCH_INVENTORY_ERROR';
+const NO_STEAMID_PROVIDED = 'NO_STEAMID_PROVIDED';
+
+module.exports = {
+  ONE_DAY,
+  AWS_REGION,
+  PRICES_API_URL,
+  INVENTORY_TABLE,
+  NO_STEAMID_PROVIDED,
+  DYNAMO_DB_FETCH_INVENTORY_ERROR
+};
